@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetVista 3D: HDLC Bit Stuffing & Framing Protocol Engineering Platform</title>
+  <meta name="description" content="Comprehensive academic engineering and interactive research platform for HDLC bit stuffing and framing protocols. Candidate: Bhavy Gol (ID: 25CS016). Features interactive 3D WebGL physical link simulations, multi-mode bit inspection, rigorous foundational-to-advanced networking theory, technical lecture modules, benchmark test suites, and university exam worked solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- Standalone Vendors for 3D and Graphing -->
+  <script src="assets/vendor/three.min.js"></script>
+  <script src="assets/vendor/OrbitControls.js"></script>
+  <script src="assets/vendor/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="main-nav">
+    <a href="#hero" class="nav-brand">
+      <span class="brand-badge">25CS016</span>
+      <span>NetVista <strong style="color:var(--accent-cyan);">3D</strong></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#hero">Overview</a></li>
+      <li><a href="#visualizer-3d">3D Visualizer</a></li>
+      <li><a href="#simulator">Live Simulator</a></li>
+      <li><a href="#technical-knowledge">Comprehensive Knowledge Base</a></li>
+      <li><a href="#theory-mastery">Theory Foundations</a></li>
+      <li><a href="#algorithms">Core Code</a></li>
+      <li><a href="#benchmarks">Experiments &amp; Graphs</a></li>
+      <li><a href="#exam-solution">Exam Solution</a></li>
+      <li><a href="#deliverables" class="nav-cta">Download Docs</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    <div class="hero-container">
+      <div class="hero-text-col">
+        <div class="hero-badge-pill">
+          <span>ITUC201: Fundamentals of Computer Networks &bull; CHARUSAT</span>
+        </div>
+        <h1 class="hero-title">
+          Bit Stuffing &amp; Framing in <span class="gradient-text">HDLC Protocol</span>
+        </h1>
+        <p class="hero-subtitle">
+          An exhaustive, university-level interactive engineering platform demonstrating Data Link Layer frame transparency, physical serial bit-stuffing dynamics, 3D WebGL link visualizations, and empirical verification benchmarks.
+        </p>
+
+        <div class="hero-meta">
+          <div class="meta-item">
+            <span class="meta-label">Candidate</span>
+            <span class="meta-value" style="color:#fff; font-weight:700;">Bhavy Gol</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Student ID</span>
+            <span class="meta-value" style="color:var(--accent-cyan); font-weight:700;">25CS016</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">HDLC Flag</span>
+            <span class="meta-value" style="font-family:'JetBrains Mono'; color:var(--accent-purple);">01111110 (0x7E)</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Test Verification</span>
+            <span class="meta-value" style="color:var(--accent-emerald);">100% PASS (25 Cases)</span>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#simulator" class="btn btn-primary">
+            <span>Launch Live Simulator</span>
+            <span>&rarr;</span>
+          </a>
+          <a href="#technical-knowledge" class="btn btn-secondary">
+            <span>Explore Knowledge Base</span>
+          </a>
+          <a href="assets/docs/NetVista3D_HDLC_Technical_Report.pdf" target="_blank" class="btn btn-secondary">
+            <span>Technical Report PDF</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual Card with 3D Canvas -->
+      <div class="hero-visual-card" id="visualizer-3d">
+        <div class="canvas-3d-box">
+          <div id="three-canvas"></div>
+          <div class="canvas-overlay-ui">
+            <div style="display:flex; gap:8px;">
+              <button class="pill-btn active-3d-btn" id="mode-orbital-btn" onclick="switch3DMode('orbital')">Orbital Frame Ring</button>
+              <button class="pill-btn" id="mode-linear-btn" onclick="switch3DMode('linear')">Point-to-Point Link (TX &rarr; RX)</button>
+            </div>
+            <span class="canvas-controls-pill">Orbit: Drag | Zoom: Scroll</span>
+          </div>
+          <div class="canvas-hud-bottom">
+            <div style="font-size:0.8rem; color:var(--text-muted);">
+              Nodes: 
+              <span style="color:#a855f7; font-weight:700;">&#9632; Flag (01111110)</span> | 
+              <span style="color:#38bdf8; font-weight:700;">&#9632; Data 1</span> | 
+              <span style="color:#64748b; font-weight:700;">&#9632; Data 0</span> | 
+              <span style="color:#f43f5e; font-weight:700;">&#9632; Stuffed '0'</span> |
+              <span style="color:#10b981; font-weight:700;">&#9632; Transceiver</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="pill-btn" id="toggle-spin-btn" onclick="toggle3DRotation()">Auto Spin: ON</button>
+              <button class="pill-btn" onclick="reset3DCamera()">Reset Camera</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Simulator & Ribbon Section -->
+  <section class="section" id="simulator" style="background: rgba(15, 23, 42, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Laboratory</span>
+        <h2 class="section-title">Live HDLC Bit Stuffing &amp; Destuffing Engine</h2>
+        <p class="section-desc">
+          Test any custom binary payload or select official benchmark presets. The pipeline executes deterministic sender stuffing, HDLC flag encapsulation, and receiver destuffing with real-time audit tracing.
+        </p>
+      </div>
+
+      <div class="simulator-grid">
+        <!-- Input & Controls -->
+        <div class="sim-panel">
+          <div class="sim-panel-title">
+            <span style="color:var(--accent-cyan);">&#9881;</span>
+            <span>Sender Input Stream &amp; Presets</span>
+          </div>
+
+          <div class="sim-input-group">
+            <label for="payload-input">Binary Payload (Enter 0s and 1s only):</label>
+            <div class="input-with-actions">
+              <input type="text" id="payload-input" class="binary-input" value="011111101111101" spellcheck="false" placeholder="e.g. 011111101111101">
+              <button class="btn btn-primary" onclick="runSimulationPipeline()">Run Pipeline</button>
+            </div>
+          </div>
+
+          <div id="sim-error-alert" style="display:none; color:#f43f5e; background:rgba(244,63,94,0.15); border:1px solid rgba(244,63,94,0.3); padding:10px 14px; border-radius:var(--radius-sm); font-size:0.85rem;"></div>
+
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-dim); text-transform:uppercase; font-weight:700; margin-bottom:8px; display:block;">Assessment Test Presets:</label>
+            <div class="preset-pills">
+              <button class="pill-btn" onclick="setPreset('011111101111101')">Exam Problem (15 bits)</button>
+              <button class="pill-btn" onclick="setPreset('01111110')">Case 4: Flag in Payload</button>
+              <button class="pill-btn" onclick="setPreset('11111')">Case 2: Five 1s (11111)</button>
+              <button class="pill-btn" onclick="setPreset('111111')">Case 3: Six 1s (111111)</button>
+              <button class="pill-btn" onclick="setPreset('11111011111')">Case 5: Multi-Runs of 5</button>
+              <button class="pill-btn" onclick="setPreset('1111111111')">Case 6: Ten 1s</button>
+              <button class="pill-btn" onclick="setPreset('101010')">Case 1: Alternating (101010)</button>
+              <button class="pill-btn" onclick="setPreset('11111111111111111111')">Case 10: 20x 1s Stream</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Metrics -->
+          <div class="stats-grid" style="margin-top:auto;">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-orig-len">15 bits</div>
+              <div class="stat-desc">Original Length</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-stuffed-len">17 bits</div>
+              <div class="stat-desc">Stuffed Length</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-stuffed-count" style="color:var(--accent-rose);">2 zeros</div>
+              <div class="stat-desc">Inserted Zeros</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-overhead" style="color:var(--accent-amber);">13.33%</div>
+              <div class="stat-desc">Overhead %</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Visualization Ribbons -->
+        <div class="sim-panel">
+          <div class="sim-panel-title">
+            <span style="color:var(--accent-emerald);">&#128065;</span>
+            <span>Bit Stream Ribbons &amp; Link Verification</span>
+            <div id="stat-status-pill" style="margin-left:auto;"></div>
+          </div>
+
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">1. Original Input Payload:</div>
+            <div class="bit-stream-ribbon" id="original-ribbon"></div>
+          </div>
+
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">2. Stuffed Payload (Red cells = Inserted Zeros):</div>
+            <div class="bit-stream-ribbon" id="stuffed-ribbon"></div>
+          </div>
+
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">3. Transmitted HDLC Physical Frame (Flags Wrapped):</div>
+            <div class="bit-stream-ribbon" id="framed-ribbon"></div>
+          </div>
+
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">4. Receiver Restored Payload (100% Identity):</div>
+            <div class="bit-stream-ribbon" id="restored-ribbon"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Execution Trace Tables Tab -->
+      <div style="margin-top:2.5rem;">
+        <h3 style="font-size:1.3rem; margin-bottom:1rem; font-weight:700;">Step-by-Step Bit Transition Audit Trace</h3>
+        <div class="simulator-grid">
+          <div class="sim-panel" style="padding:1.25rem;">
+            <h4 style="font-size:0.95rem; margin-bottom:0.75rem; color:var(--accent-cyan);">Sender Step-by-Step Stuffing Trace</h4>
+            <div class="table-container">
+              <table class="trace-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Input Pos</th>
+                    <th>Bit</th>
+                    <th>1s Count</th>
+                    <th>Action</th>
+                    <th>Current Stuffed Stream</th>
+                  </tr>
+                </thead>
+                <tbody id="sender-trace-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="sim-panel" style="padding:1.25rem;">
+            <h4 style="font-size:0.95rem; margin-bottom:0.75rem; color:var(--accent-emerald);">Receiver Step-by-Step Destuffing Trace</h4>
+            <div class="table-container">
+              <table class="trace-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Stuffed Pos</th>
+                    <th>Bit</th>
+                    <th>1s Count</th>
+                    <th>Action</th>
+                    <th>Restored Stream</th>
+                  </tr>
+                </thead>
+                <tbody id="receiver-trace-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPREHENSIVE TECHNICAL KNOWLEDGE BASE & EXPLANATION CORPUS -->
+  <section class="section" id="technical-knowledge">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Deep Architectural Corpus</span>
+        <h2 class="section-title">Comprehensive Technical Knowledge Base &amp; Concept Explanations</h2>
+        <p class="section-desc">
+          An exhaustive, university-level reference covering physical link framing, mathematical bounds, error detection, hardware shift registers, and end-to-end data link transparency.
+        </p>
+      </div>
+
+      <!-- Module 1 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge blue">Foundation 01</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">OSI Layer 2 Framing Foundations &amp; Physical Link Boundary Demarcation</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Data Link Layer &bull; Synchronous Transmission</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> In computer network architectures, the OSI reference model assigns distinct responsibilities to each protocol tier. Layer 1 (Physical Layer) moves raw electrical voltages, optical pulses, or radio signals across physical mediums without understanding payload context. Layer 2 (Data Link Layer) must convert that continuous, raw physical bit stream into identifiable, discrete logical units called <em>frames</em>.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "In digital communications, physical transmission links do not provide natural packet boundaries; they simply deliver an uninterrupted stream of binary bits. Framing is the fundamental process by which the Data Link Layer breaks this continuous bit stream into manageable, discrete blocks of data called frames. To enable the receiving hardware to identify where a transmitted frame begins and ends, protocol designers establish unique boundary delimiters. Without robust boundary demarcation, receiving hardware would suffer total synchronization loss, making it impossible to locate protocol headers, source and destination addresses, payload data, or error detection checksums. High-Level Data Link Control (HDLC) establishes synchronous serial framing by utilizing a standardized 8-bit flag delimiter pattern."
+        </div>
+      </div>
+
+      <!-- Module 2 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge purple">Foundation 02</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">HDLC Protocol Architecture &amp; The Flag Delimiter Emulation Dilemma</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Flag: 01111110 (0x7E) &bull; Premature Frame Termination</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> High-Level Data Link Control (HDLC, standardized under ISO/IEC 13239) is a bit-oriented synchronous protocol. Unlike asynchronous communications that rely on character start/stop bits, HDLC relies on a unique 8-bit flag sequence: <code>01111110</code> (hexadecimal <code>0x7E</code>), characterized by six consecutive binary 1s flanked by zeros.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "In synchronous communications, HDLC demarcates frame boundaries using the flag pattern <strong>01111110</strong> at the start and end of every transmission. However, this creates a major engineering problem known as the <em>Flag Emulation Dilemma</em>. Upper-layer network payloads are completely arbitrary binary streams. If a user transmits compressed files, encrypted cryptographic keys, compiled machine executables, or multimedia data, the bit sequence 01111110 will naturally appear inside the user payload data. If transmitted raw without alteration, the physical receiver hardware will detect this sequence inside the payload and misinterpret it as an early frame-closing flag. This causes the receiver to prematurely terminate the frame, compute the frame check sequence (FCS) on partial data, and discard the remainder of the payload, causing catastrophic data corruption. Frame transparency requires a deterministic mechanism guaranteeing that six consecutive 1s NEVER appear in the data payload."
+        </div>
+      </div>
+
+      <!-- Module 3 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge amber">Foundation 03</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">The Bit Stuffing &amp; Destuffing Algorithm: Mathematical Determinism</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Sender Insertion &bull; Receiver Lookahead &bull; Deterministic Rules</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> To guarantee data transparency across bit-oriented links, HDLC employs <strong>Bit Stuffing</strong> (also known as zero-bit insertion). The sender and receiver follow strictly defined, deterministic mathematical rules to prevent flag collisions and guarantee 100% loss-free payload restoration.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "The bit stuffing mechanism solves the flag emulation problem with mathematical determinism. The sender hardware maintains a running counter of consecutive '1' bits while transmitting the user payload. Whenever this counter reaches five, the sender unconditionally injects a single '0' bit immediately into the stream. Notice that this zero injection is unconditional: even if the very next bit in the user payload was already a '0', the sender still inserts a stuffed zero. This guarantees that six consecutive ones can never, under any circumstance, appear within the transmitted payload body. On the receiving end, the receiver tracks the exact same consecutive-ones counter. When the receiver detects five consecutive ones, it inspects the very next bit. If that next bit is a '0', the receiver knows with absolute mathematical certainty that it was inserted by the sender's bit-stuffing logic. The receiver discards this zero bit, resetting its counter and restoring the original user data perfectly. If the sixth bit is a '1', the receiver identifies it as a true flag delimiter (01111110) or an abort condition (seven or more ones)."
+        </div>
+      </div>
+
+      <!-- Module 4 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge emerald">Foundation 04</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">Interactive 3D Physical Link Modeling &amp; Spatial Frame Topology</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Dual-Mode 3D WebGL Hologram &bull; Orbital Ring vs. Point-to-Point Laser Link</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> Serial bit streams are traditionally illustrated using static 2D diagrams that fail to convey physical transmission dynamics. Our WebGL 3D simulation transforms abstract serial bits into physical spatial geometry with two interactive modes: <em>Orbital Frame Ring</em> and <em>Point-to-Point Physical Link</em>.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "Our interactive 3D WebGL visualization provides an advanced visual representation of Data Link Layer transmission. In **Orbital Frame Ring** mode, the entire HDLC transmission is displayed as a circular ring of holographic bit pillars rotating around a central transceiver core. The purple pillars represent opening and closing flag delimiters (01111110), blue pillars represent user data 1s, and slate pillars represent user data 0s. The elevated, glowing red pillars distinctly highlight every stuffed zero bit injected by our algorithm. When switching to **Point-to-Point Link** mode, the model restructures into an active serial communication link between a Transmitter Station and a Receiver Station connected by a physical laser transmission channel. This enables learners and evaluators to observe how stuffed zeros prevent flag collisions before reaching the receiver."
+        </div>
+      </div>
+
+      <!-- Module 5 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge blue">Foundation 05</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">Python Algorithmic Architecture &amp; Defensive Stream Verification</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Time Complexity: O(N) &bull; Space Complexity: O(N) &bull; Zero External Dependencies</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> The Python 3 core module (<code>src/hdlc_core.py</code>) authored by <strong>Bhavy Gol (ID: 25CS016)</strong> provides production-quality, side-effect-free algorithms for bit stuffing, destuffing, and complete frame encapsulation. It operates with $O(N)$ linear time complexity and $O(N)$ auxiliary space complexity.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "Our pure Python implementation in `src/hdlc_core.py` is engineered for both computational efficiency and educational clarity. In `sender_bit_stuff`, the algorithm processes the input stream in a single linear pass with O(N) time complexity, appending bits to a buffer while tracking consecutive 1s. When the count reaches five, it inserts '0' and resets the counter. In `receiver_bit_destuff`, defensive error handling validates stream integrity. If five ones are followed by a '1' inside the payload body, our function immediately raises a `ValueError` for illegal protocol violation. The interactive laboratory simulator on this website allows users to run custom inputs and predefined presets—such as Case 4 with flag pattern `01111110`—displaying live bit ribbons, metrics, and step-by-step trace tables with a 100% verification match."
+        </div>
+      </div>
+
+      <!-- Module 6 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge purple">Foundation 06</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">Information Theory Bounds &amp; Quantitative Overhead Distribution</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Overhead Limits: 0.00% to 20.00% &bull; Monte Carlo Benchmark Suite</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> Bit stuffing overhead is not static; it fluctuates based on the distribution of ones in the payload. Evaluating 25 test cases confirms that the overhead percentage ranges strictly between $0.00\%$ and $20.00\%$.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "To evaluate transmission overhead under real-world conditions, our automated benchmark runner (`experiment_runner.py`) evaluates 25 distinct test cases. Our dynamic Chart.js graph reveals that bit-stuffing overhead correlates directly with 1-bit density. When payloads have low 1-bit density (such as alternating bits or zeros), the overhead is exactly 0.00%. As consecutive runs of ones increase, overhead rises linearly toward its theoretical maximum of **20.00%**, which occurs when transmitting continuous streams of ones (1 inserted zero per 5 data bits). Across all 25 test cases—including boundary edge cases and synthetic Monte Carlo streams with varying 1-bit densities—our roundtrip verification achieved a 100% PASS rate with zero bit errors."
+        </div>
+      </div>
+
+      <!-- Module 7 -->
+      <div class="deep-card">
+        <div class="deep-card-header">
+          <div>
+            <span class="deep-badge amber">Foundation 07</span>
+            <h3 style="font-size:1.3rem; font-weight:700; margin-top:6px; color:#fff;">Worked University Examination Numerical Problem &amp; Viva Defense</h3>
+          </div>
+          <span style="font-size:0.85rem; color:var(--text-dim);">Payload: 011111101111101 &bull; 15 bits &rarr; 17 bits &bull; Overhead: 13.33%</span>
+        </div>
+        <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.8;">
+          <strong>Core Conceptual Scope:</strong> Full mathematical derivation and worked solution for the CHARUSAT 7-mark numerical problem on payload <code>011111101111101</code>: calculating exact stuffing indices, constructing the 33-bit framed stream, and proving mathematical overhead of $13.33\%$.
+        </p>
+        <div class="speech-script-box">
+          <span class="speech-script-label">Comprehensive In-Depth Technical Explanation:</span>
+          "The solved 7-mark university examination question demonstrates bit stuffing on payload `011111101111101` (15 bits). The sender encounters five consecutive 1s at bit 6 and injects a zero at index 7. It encounters five consecutive 1s again at bit 13 and injects a second zero at index 15. The resulting stuffed payload is `01111101011111001` (17 bits). Encapsulating this between opening and closing flags yields a complete physical frame of 33 bits. Two zero bits were inserted, resulting in an exact overhead of (2 / 15) * 100% = 13.33%. The receiver destuffs the stream back to its original 15 bits with zero loss. This demonstrates how HDLC bit stuffing guarantees data transparency with minimal overhead and full reproducibility under candidate ID **25CS016**."
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comprehensive Theory Mastery (Basic to High / Advanced) -->
+  <section class="section" id="theory-mastery" style="background: rgba(15, 23, 42, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Conceptual Foundations</span>
+        <h2 class="section-title">In-Depth HDLC Theory: From Basic to Advanced</h2>
+        <p class="section-desc">
+          Structured conceptual breakdown detailing protocol mechanics, physical link framing, transparency guarantees, mathematical limits, and modern industrial comparisons.
+        </p>
+      </div>
+
+      <div class="gallery-grid" style="grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));">
+        <!-- Level 1: Basic -->
+        <div class="sim-panel" style="border-top: 4px solid var(--accent-cyan);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; font-weight:800; background:rgba(6,182,212,0.15); color:var(--accent-cyan); padding:4px 8px; border-radius:4px; text-transform:uppercase;">Level 1 &bull; Basic</span>
+            <span style="font-size:0.8rem; color:var(--text-dim);">OSI Layer 2</span>
+          </div>
+          <h3 style="font-size:1.2rem; color:#fff; font-weight:700;">What is HDLC &amp; Framing?</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+            High-Level Data Link Control (HDLC, ISO 13239) is a synchronous bit-oriented protocol operating at the Data Link Layer (OSI Layer 2). Because serial transmission cables only carry raw voltages representing bit streams, receivers need a reliable delimiter to recognize where one packet begins and where it ends.
+          </p>
+          <ul style="font-size:0.85rem; color:var(--text-muted); line-height:1.8; padding-left:1.2rem;">
+            <li><strong style="color:#fff;">Flag Delimiter:</strong> A standardized 8-bit pattern <code>01111110</code> (0x7E).</li>
+            <li><strong style="color:#fff;">Bit-Oriented:</strong> Unlike character-oriented protocols (e.g., ASCII PPP byte stuffing), HDLC works directly on individual bit streams regardless of character encoding.</li>
+            <li><strong style="color:#fff;">Full Duplex:</strong> Supports concurrent transmission and reception across leased lines and satellite links.</li>
+          </ul>
+        </div>
+
+        <!-- Level 2: Intermediate -->
+        <div class="sim-panel" style="border-top: 4px solid var(--accent-amber);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; font-weight:800; background:rgba(245,158,11,0.15); color:var(--accent-amber); padding:4px 8px; border-radius:4px; text-transform:uppercase;">Level 2 &bull; Intermediate</span>
+            <span style="font-size:0.8rem; color:var(--text-dim);">Data Transparency</span>
+          </div>
+          <h3 style="font-size:1.2rem; color:#fff; font-weight:700;">The Flag Emulation Dilemma</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+            Network payloads contain arbitrary binary information—compressed images, encrypted keys, or multimedia. It is completely plausible that the pattern <code>01111110</code> naturally occurs inside user data.
+          </p>
+          <ul style="font-size:0.85rem; color:var(--text-muted); line-height:1.8; padding-left:1.2rem;">
+            <li><strong style="color:#fff;">The Danger:</strong> Without protection, receiver hardware would parse this data pattern as an early frame closing flag, truncating the frame and dropping the remaining payload.</li>
+            <li><strong style="color:#fff;">Bit Stuffing Rule:</strong> Whenever the sender detects five consecutive 1s (<code>11111</code>), it automatically injects a single <code>'0'</code> bit.</li>
+            <li><strong style="color:#fff;">Receiver Rule:</strong> If five 1s are followed by a <code>0</code>, that <code>0</code> is discarded (destuffed). If followed by another <code>1</code>, it indicates a true boundary flag (if 7th bit is 0) or an abort condition.</li>
+          </ul>
+        </div>
+
+        <!-- Level 3: Advanced -->
+        <div class="sim-panel" style="border-top: 4px solid var(--accent-rose);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; font-weight:800; background:rgba(244,63,94,0.15); color:var(--accent-rose); padding:4px 8px; border-radius:4px; text-transform:uppercase;">Level 3 &bull; Advanced</span>
+            <span style="font-size:0.8rem; color:var(--text-dim);">Information Theory</span>
+          </div>
+          <h3 style="font-size:1.2rem; color:#fff; font-weight:700;">Mathematical Overhead &amp; Error Propagation</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+            Bit stuffing introduces dynamic overhead dependent on payload entropy:
+          </p>
+          <ul style="font-size:0.85rem; color:var(--text-muted); line-height:1.8; padding-left:1.2rem;">
+            <li><strong style="color:#fff;">Theoretical Bounds:</strong>
+              <br>&bull; Best Case ($0\%$ overhead): $0$ consecutive runs of five 1s.
+              <br>&bull; Worst Case ($20\%$ overhead): Continuous string of 1s (1 stuffed zero bit per 5 bits, i.e., $1/5 = 20\%$).
+            </li>
+            <li><strong style="color:#fff;">Expected Value:</strong> For independent uniform bits ($P(1) = 0.5$), probability of 5 consecutive ones is $(1/2)^5 = 1/32 \approx 3.125\%$.</li>
+            <li><strong style="color:#fff;">Inverted Bit Error:</strong> If an inverted bit corrupts a stuffed '0' into a '1' in transit, the receiver detects six consecutive 1s and triggers an illegal frame abort.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Comparative Engineering Matrix -->
+      <div style="margin-top:2.5rem; background:var(--bg-card); border:1px solid var(--border-glass); border-radius:var(--radius-lg); padding:2rem;">
+        <h3 style="font-size:1.25rem; font-weight:700; margin-bottom:1rem; color:#fff;">Data Link Framing Methods: Comparative Engineering Matrix</h3>
+        <div class="table-container">
+          <table class="trace-table">
+            <thead>
+              <tr>
+                <th>Framing Technique</th>
+                <th>Protocol Standard</th>
+                <th>Granularity</th>
+                <th>Transparency Mechanism</th>
+                <th>Vulnerability / Tradeoff</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color:var(--accent-cyan);">Bit Stuffing (Current)</strong></td>
+                <td>HDLC, SDLC, X.25, LAPB</td>
+                <td>Bit-Level</td>
+                <td>Insert '0' after five 1s (Flag: 01111110)</td>
+                <td>Variable frame length; bit insertion processing overhead</td>
+              </tr>
+              <tr>
+                <td><strong>Byte / Character Stuffing</strong></td>
+                <td>PPP, BISYNC</td>
+                <td>Byte-Level (8-bit)</td>
+                <td>Escape characters (e.g. <code>0x7D</code> before <code>0x7E</code>)</td>
+                <td>Higher overhead (8-bit escape byte for each collision)</td>
+              </tr>
+              <tr>
+                <td><strong>Character Count</strong></td>
+                <td>DECnet (DDCMP)</td>
+                <td>Header Field</td>
+                <td>Count integer in frame header specifies payload bytes</td>
+                <td>Catastrophic framing loss if header count is corrupted in transit</td>
+              </tr>
+              <tr>
+                <td><strong>Physical Layer Coding Violations</strong></td>
+                <td>Ethernet (4B/5B, Manchester), FDDI</td>
+                <td>Signal / Voltage</td>
+                <td>Unused physical code words mark frame start/end</td>
+                <td>Redundant signaling bandwidth required on physical link</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Python Code & Architecture Section -->
+  <section class="section" id="algorithms">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Pure Source Implementation</span>
+        <h2 class="section-title">Algorithmic Architecture &amp; Python Core</h2>
+        <p class="section-desc">
+          Modular, production-grade Python 3 implementation authored by <strong>Bhavy Gol (ID: 25CS016)</strong> with rigorous validation, $O(N)$ linear time complexity, and zero external runtime dependencies.
+        </p>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab(event, 'code-sender')">sender_bit_stuff()</button>
+        <button class="tab-btn" onclick="switchTab(event, 'code-receiver')">receiver_bit_destuff()</button>
+        <button class="tab-btn" onclick="switchTab(event, 'code-framing')">frame_encoding() &amp; decoding()</button>
+        <button class="tab-btn" onclick="switchTab(event, 'code-validation')">Input Sanitization</button>
+      </div>
+
+      <div id="code-sender" class="tab-pane active">
+        <div class="code-window">
+          <div class="window-header">
+            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+            <div class="window-title">src/hdlc_core.py &mdash; sender_bit_stuff(payload) | Bhavy Gol (25CS016)</div>
+            <div style="font-size:0.75rem; color:var(--text-dim);">Time: O(N) | Space: O(N)</div>
+          </div>
+          <pre class="code-pre"><code><span style="color:#f43f5e;">def</span> <span style="color:#38bdf8;">sender_bit_stuff</span>(payload: <span style="color:#a855f7;">str</span>) -&gt; <span style="color:#a855f7;">str</span>:
+    <span style="color:#64748b;">"""
+    Candidate: Bhavy Gol | Student ID: 25CS016
+    Applies the HDLC bit stuffing rule to the input binary payload.
+    Rule: After every sequence of five consecutive '1' bits, insert a '0' bit.
+    """</span>
+    clean_payload = validate_binary_string(payload, <span style="color:#10b981;">"Payload"</span>)
+    <span style="color:#f43f5e;">if</span> <span style="color:#f43f5e;">not</span> clean_payload:
+        <span style="color:#f43f5e;">return</span> <span style="color:#10b981;">""</span>
+    
+    stuffed = []
+    consecutive_ones = 0
+    
+    <span style="color:#f43f5e;">for</span> bit <span style="color:#f43f5e;">in</span> clean_payload:
+        stuffed.append(bit)
+        <span style="color:#f43f5e;">if</span> bit == <span style="color:#10b981;">'1'</span>:
+            consecutive_ones += 1
+            <span style="color:#f43f5e;">if</span> consecutive_ones == 5:
+                <span style="color:#64748b;"># Mandatory HDLC Rule: Insert stuffed zero bit</span>
+                stuffed.append(<span style="color:#10b981;">'0'</span>)
+                consecutive_ones = 0  <span style="color:#64748b;"># Reset run counter</span>
+        <span style="else">else</span>:
+            consecutive_ones = 0
+            
+    <span style="color:#f43f5e;">return</span> <span style="color:#10b981;">""</span>.join(stuffed)</code></pre>
+        </div>
+      </div>
+
+      <div id="code-receiver" class="tab-pane">
+        <div class="code-window">
+          <div class="window-header">
+            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+            <div class="window-title">src/hdlc_core.py &mdash; receiver_bit_destuff(stuffed_payload) | Bhavy Gol (25CS016)</div>
+            <div style="font-size:0.75rem; color:var(--text-dim);">Strict Validation &amp; Error Handling</div>
+          </div>
+          <pre class="code-pre"><code><span style="color:#f43f5e;">def</span> <span style="color:#38bdf8;">receiver_bit_destuff</span>(stuffed_payload: <span style="color:#a855f7;">str</span>) -&gt; <span style="color:#a855f7;">str</span>:
+    <span style="color:#64748b;">"""
+    Candidate: Bhavy Gol | Student ID: 25CS016
+    Reverses HDLC bit stuffing on a stuffed payload stream.
+    Rule: After five consecutive '1' bits, validate and discard the inserted '0' bit.
+    """</span>
+    clean_stuffed = validate_binary_string(stuffed_payload, <span style="color:#10b981;">"Stuffed Payload"</span>)
+    destuffed = []
+    consecutive_ones = 0
+    idx = 0
+    n = len(clean_stuffed)
+    
+    <span style="color:#f43f5e;">while</span> idx &lt; n:
+        bit = clean_stuffed[idx]
+        destuffed.append(bit)
+        
+        <span style="color:#f43f5e;">if</span> bit == <span style="color:#10b981;">'1'</span>:
+            consecutive_ones += 1
+            <span style="color:#f43f5e;">if</span> consecutive_ones == 5:
+                <span style="color:#f43f5e;">if</span> idx + 1 &gt;= n:
+                    <span style="color:#f43f5e;">raise</span> <span style="color:#f59e0b;">ValueError</span>(<span style="color:#10b981;">"Malformed: Stream terminated after 5 consecutive 1s without stuffed bit!"</span>)
+                next_bit = clean_stuffed[idx + 1]
+                <span style="color:#f43f5e;">if</span> next_bit == <span style="color:#10b981;">'1'</span>:
+                    <span style="color:#f43f5e;">raise</span> <span style="color:#f59e0b;">ValueError</span>(<span style="color:#10b981;">"Malformed: Found 6 consecutive 1s in payload! Violation of HDLC stuffing rule."</span>)
+                <span style="color:#64748b;"># Discard stuffed '0' bit</span>
+                idx += 2
+                consecutive_ones = 0
+                <span style="color:#f43f5e;">continue</span>
+        <span style="else">else</span>:
+            consecutive_ones = 0
+        idx += 1
+        
+    <span style="color:#f43f5e;">return</span> <span style="color:#10b981;">""</span>.join(destuffed)</code></pre>
+        </div>
+      </div>
+
+      <div id="code-framing" class="tab-pane">
+        <div class="code-window">
+          <div class="window-header">
+            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+            <div class="window-title">src/hdlc_core.py &mdash; Frame Encapsulation &amp; Decapsulation | Bhavy Gol (25CS016)</div>
+            <div style="font-size:0.75rem; color:var(--text-dim);">HDLC Standard Flag: 01111110</div>
+          </div>
+          <pre class="code-pre"><code>HDLC_FLAG = <span style="color:#10b981;">"01111110"</span>
+
+<span style="color:#f43f5e;">def</span> <span style="color:#38bdf8;">frame_encoding</span>(payload: <span style="color:#a855f7;">str</span>) -&gt; <span style="color:#a855f7;">str</span>:
+    <span style="color:#64748b;">"""Encapsulates payload into HDLC frame by bit-stuffing and wrapping with flag delimiters."""</span>
+    stuffed = sender_bit_stuff(payload)
+    <span style="color:#f43f5e;">return</span> HDLC_FLAG + stuffed + HDLC_FLAG
+
+<span style="color:#f43f5e;">def</span> <span style="color:#38bdf8;">frame_decoding</span>(frame: <span style="color:#a855f7;">str</span>) -&gt; <span style="color:#a855f7;">str</span>:
+    <span style="color:#64748b;">"""Decapsulates HDLC frame by stripping boundary flags and destuffing body."""</span>
+    clean_frame = validate_binary_string(frame, <span style="color:#10b981;">"Frame"</span>)
+    <span style="color:#f43f5e;">if</span> <span style="color:#f43f5e;">not</span> (clean_frame.startswith(HDLC_FLAG) <span style="color:#f43f5e;">and</span> clean_frame.endswith(HDLC_FLAG)):
+        <span style="color:#f43f5e;">raise</span> <span style="color:#f59e0b;">ValueError</span>(<span style="color:#10b981;">"Frame delimiter error: Frame must begin and end with HDLC flag 01111110"</span>)
+    stuffed_body = clean_frame[<span style="color:#a855f7;">len</span>(HDLC_FLAG):-<span style="color:#a855f7;">len</span>(HDLC_FLAG)]
+    <span style="color:#f43f5e;">return</span> receiver_bit_destuff(stuffed_body)</code></pre>
+        </div>
+      </div>
+
+      <div id="code-validation" class="tab-pane">
+        <div class="code-window">
+          <div class="window-header">
+            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+            <div class="window-title">src/hdlc_core.py &mdash; Input Sanitization &amp; Assertion Tests</div>
+            <div style="font-size:0.75rem; color:var(--text-dim);">Defensive Programming</div>
+          </div>
+          <pre class="code-pre"><code><span style="color:#f43f5e;">def</span> <span style="color:#38bdf8;">validate_binary_string</span>(bit_stream: <span style="color:#a855f7;">str</span>, name: <span style="color:#a855f7;">str</span> = <span style="color:#10b981;">"Payload"</span>) -&gt; <span style="color:#a855f7;">str</span>:
+    <span style="color:#64748b;">"""Validates string contains only binary digits '0' and '1'. Handles whitespace stripping."""</span>
+    <span style="color:#f43f5e;">if</span> bit_stream <span style="color:#f43f5e;">is</span> <span style="color:#f59e0b;">None</span>:
+        <span style="color:#f43f5e;">raise</span> <span style="color:#f59e0b;">ValueError</span>(f<span style="color:#10b981;">"{name} cannot be None."</span>)
+    cleaned = <span style="color:#10b981;">""</span>.join(bit_stream.split())
+    <span style="color:#f43f5e;">if</span> <span style="color:#f43f5e;">not</span> all(char <span style="color:#f43f5e;">in</span> <span style="color:#10b981;">"01"</span> <span style="color:#f43f5e;">for</span> char <span style="color:#f43f5e;">in</span> cleaned):
+        invalid_chars = set(char <span style="color:#f43f5e;">for</span> char <span style="color:#f43f5e;">in</span> cleaned <span style="color:#f43f5e;">if</span> char <span style="color:#f43f5e;">not</span> <span style="color:#f43f5e;">in</span> <span style="color:#10b981;">"01"</span>)
+        <span style="color:#f43f5e;">raise</span> <span style="color:#f59e0b;">ValueError</span>(
+            f<span style="color:#10b981;">"Invalid non-binary characters detected in {name}: {sorted(list(invalid_chars))}. Only '0' and '1' permitted."</span>
+        )
+    <span style="color:#f43f5e;">return</span> cleaned</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Empirical Benchmarks & Overhead Analysis Section -->
+  <section class="section" id="benchmarks" style="background: rgba(15, 23, 42, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Experimental Rigor</span>
+        <h2 class="section-title">25-Test Benchmark Suite &amp; Overhead Analysis</h2>
+        <p class="section-desc">
+          Automated evaluation executed over deterministic edge cases and synthetic Monte Carlo streams across varying 1-bit density distributions ($P(1) \in [0.1, 0.9]$).
+        </p>
+      </div>
+
+      <div class="simulator-grid" style="margin-bottom:2.5rem;">
+        <div class="sim-panel">
+          <div class="sim-panel-title">
+            <span style="color:var(--accent-rose);">&#128202;</span>
+            <span>Stuffing Overhead (%) vs. 1-Bit Density (%)</span>
+          </div>
+          <div style="height: 320px; position:relative;">
+            <canvas id="overheadChart"></canvas>
+          </div>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-top:8px;">
+            <strong style="color:#fff;">Empirical Finding:</strong> Stuffing overhead scales strictly in proportion to continuous sequences of '1' bits. Maximum theoretical overhead is bounded at <strong>20.00%</strong> (1 stuffed zero bit per 5 payload ones).
+          </p>
+        </div>
+
+        <div class="sim-panel">
+          <div class="sim-panel-title">
+            <span style="color:var(--accent-purple);">&#128203;</span>
+            <span>Benchmark Dataset Preview (25 Total Cases)</span>
+          </div>
+          <div class="table-container" style="max-height:350px;">
+            <table class="trace-table">
+              <thead>
+                <tr>
+                  <th>Case ID</th>
+                  <th>Description</th>
+                  <th>Orig Bits</th>
+                  <th>Stuffed Bits</th>
+                  <th>Overhead %</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Case 1</td><td>Alternating Bits (101010)</td><td>6</td><td>6</td><td>0.00%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 2</td><td>Five 1s (11111)</td><td>5</td><td>6</td><td>20.00%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 3</td><td>Six 1s (111111)</td><td>6</td><td>7</td><td>16.67%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 4</td><td>HDLC Flag in Payload</td><td>8</td><td>9</td><td>12.50%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 5</td><td>Multiple Runs of 5</td><td>11</td><td>13</td><td>18.18%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 6</td><td>Ten 1s (1111111111)</td><td>10</td><td>12</td><td>20.00%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 7</td><td>Eight 0s (00000000)</td><td>8</td><td>8</td><td>0.00%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Case 10</td><td>Long 20 Ones Stream</td><td>20</td><td>24</td><td>20.00%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Synth 6</td><td>Synthetic Len=44, P=0.7</td><td>44</td><td>47</td><td>6.82%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Synth 8</td><td>Synthetic Len=58, P=0.9</td><td>58</td><td>65</td><td>12.07%</td><td><span class="badge-keep">PASS</span></td></tr>
+                <tr><td>Synth 15</td><td>Synthetic Len=57, P=0.7</td><td>57</td><td>61</td><td>7.02%</td><td><span class="badge-keep">PASS</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot Proof Gallery -->
+      <h3 style="font-size:1.3rem; margin-bottom:1.25rem; font-weight:700;">Empirical Test Execution Proof Gallery</h3>
+      <div class="gallery-grid">
+        <div class="gallery-card" onclick="openImageModal('assets/img/01_Main_Dashboard.png', 'Tkinter GUI Interactive Dashboard')">
+          <div class="gallery-img-wrapper">
+            <img src="assets/img/01_Main_Dashboard.png" alt="GUI Main Dashboard">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Tkinter Visualizer Dashboard</div>
+            <div class="gallery-caption">Interactive GUI featuring preset loaders and dynamic stream highlighting.</div>
+          </div>
+        </div>
+
+        <div class="gallery-card" onclick="openImageModal('assets/img/04_HDLC_Frame.png', 'HDLC Complete Frame View')">
+          <div class="gallery-img-wrapper">
+            <img src="assets/img/04_HDLC_Frame.png" alt="HDLC Frame Encapsulation">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Frame Encapsulation View</div>
+            <div class="gallery-caption">Displaying 01111110 start/stop delimiter flags surrounding stuffed payload.</div>
+          </div>
+        </div>
+
+        <div class="gallery-card" onclick="openImageModal('assets/img/11_Automated_Tests.png', 'Automated Pytest & Unit Test Suite')">
+          <div class="gallery-img-wrapper">
+            <img src="assets/img/11_Automated_Tests.png" alt="Automated Test Suite">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Automated Pytest Results</div>
+            <div class="gallery-caption">100% PASS rate across all edge cases, exceptions, and random tests.</div>
+          </div>
+        </div>
+
+        <div class="gallery-card" onclick="openImageModal('assets/img/algorithm_flowchart.png', 'HDLC Protocol Algorithm Flowchart')">
+          <div class="gallery-img-wrapper">
+            <img src="assets/img/algorithm_flowchart.png" alt="Algorithm Flowchart">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Bit Stuffing Algorithm Flowchart</div>
+            <div class="gallery-caption">Deterministic decision tree for sender bit insertion and receiver validation.</div>
+          </div>
+        </div>
+
+        <div class="gallery-card" onclick="openImageModal('assets/img/overhead_chart.png', 'Overhead Distribution Graph')">
+          <div class="gallery-img-wrapper">
+            <img src="assets/img/overhead_chart.png" alt="Overhead Distribution Graph">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Overhead Distribution Chart</div>
+            <div class="gallery-caption">Empirical analysis graph generated by experiment_runner.py.</div>
+          </div>
+        </div>
+
+        <div class="gallery-card" onclick="openImageModal('assets/img/09_Multiple_Stuffing_Positions.png', 'Multiple Stuffing Verification')">
+          <div class="gallery-img-wrapper">
+            <img src="assets/img/09_Multiple_Stuffing_Positions.png" alt="Multiple Stuffing Positions">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Multiple Stuffing Positions</div>
+            <div class="gallery-caption">Handling consecutive clusters of 5 ones without boundary contamination.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- University Exam Solution Section -->
+  <section class="section" id="exam-solution">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">University Assessment</span>
+        <h2 class="section-title">End-Semester University Exam Question &amp; Full Solution</h2>
+        <p class="section-desc">
+          CHARUSAT ITUC201 (Fundamentals of Computer Networks) 7-mark solved numerical question with mathematical derivation, step-by-step trace, and viva defense answers authored by <strong>Bhavy Gol (25CS016)</strong>.
+        </p>
+      </div>
+
+      <div class="exam-paper">
+        <span class="exam-badge">7-Mark Numerical Problem &bull; Candidate: Bhavy Gol (25CS016)</span>
+        <h3 style="font-size:1.4rem; margin-bottom:1rem; color:#fff;">
+          Question Statement:
+        </h3>
+        <p style="font-size:1.05rem; line-height:1.7; color:var(--text-muted); margin-bottom:1.5rem;">
+          A sender application at the Data Link Layer needs to transmit the following binary payload over an HDLC synchronous serial link:
+          <br>
+          <strong style="color:var(--accent-cyan); font-family:'JetBrains Mono'; font-size:1.2rem; display:inline-block; margin-top:8px;">
+            Payload = 011111101111101 (15 bits)
+          </strong>
+        </p>
+
+        <div style="border-left: 3px solid var(--accent-cyan); padding-left:1.5rem; margin-bottom:2rem;">
+          <h4 style="color:#fff; margin-bottom:0.75rem;">Required Deliverables:</h4>
+          <ol style="color:var(--text-muted); line-height:1.8; margin-left:1.2rem;">
+            <li>Show the step-by-step sender bit-stuffing procedure and state the resulting stuffed payload.</li>
+            <li>Construct the complete HDLC-style framed bit stream transmitted over the physical medium using flag delimiter <code>01111110</code>.</li>
+            <li>Demonstrate receiver destuffing step-by-step and prove that the original payload is restored without loss.</li>
+            <li>Calculate the bit stuffing overhead in bits and percentage.</li>
+            <li>Explain why bit stuffing is mandatory for HDLC frame transparency.</li>
+          </ol>
+        </div>
+
+        <div style="background:#090e17; border:1px solid var(--border-glass); border-radius:var(--radius-md); padding:1.75rem; margin-bottom:1.5rem;">
+          <h4 style="color:var(--accent-emerald); font-size:1.15rem; margin-bottom:1rem;">Fully Worked Mathematical Solution:</h4>
+          
+          <p style="margin-bottom:0.75rem;"><strong>1. Sender Stuffing Procedure:</strong></p>
+          <p style="color:var(--text-muted); line-height:1.7; margin-bottom:1rem;">
+            Rule: Insert '0' after five consecutive 1s.
+            <br>&bull; Bit 1 to 5: <code>01111</code> (four 1s) &rarr; Keep.
+            <br>&bull; Bit 6: <code>1</code> &rarr; 5th consecutive '1' reached! <strong>Stuff '0'</strong> inserted at position 7.
+            <br>&bull; Bit 7 to 8: <code>10</code> &rarr; Reset run counter to 0.
+            <br>&bull; Bit 9 to 13: <code>11111</code> &rarr; 5 consecutive 1s reached again! <strong>Stuff '0'</strong> inserted at position 15.
+            <br>&bull; Remaining bits: <code>01</code> &rarr; Appended without stuffing.
+            <br><span style="color:#38bdf8; font-weight:700;">Resulting Stuffed Payload:</span> <code>01111101011111001</code> (17 bits)
+          </p>
+
+          <p style="margin-bottom:0.75rem;"><strong>2. Transmitted HDLC Framed Stream:</strong></p>
+          <p style="color:var(--text-muted); line-height:1.7; margin-bottom:1rem; font-family:'JetBrains Mono';">
+            Framed Stream = [FLAG] + [STUFFED PAYLOAD] + [FLAG]
+            <br><span style="color:var(--accent-purple);">01111110</span> <span style="color:var(--accent-cyan);">01111101011111001</span> <span style="color:var(--accent-purple);">01111110</span>
+            <br><span style="color:var(--text-dim); font-size:0.85rem;">Total Transmitted Length = 8 + 17 + 8 = 33 bits</span>
+          </p>
+
+          <p style="margin-bottom:0.75rem;"><strong>3. Overhead Formula &amp; Calculation:</strong></p>
+          <div style="background:#050811; padding:1rem; border-radius:var(--radius-sm); font-family:'JetBrains Mono'; margin-bottom:1rem; color:#f1f5f9;">
+            Stuffing Overhead (bits) = Stuffed Length - Original Length = 17 - 15 = 2 bits
+            <br><br>
+            Overhead (%) = (Inserted Zeros / Original Length) &times; 100%
+            <br>
+            Overhead (%) = (2 / 15) &times; 100% = 13.33%
+          </div>
+
+          <p style="margin-bottom:0.75rem;"><strong>4. Technical Justification:</strong></p>
+          <p style="color:var(--text-muted); line-height:1.7;">
+            Bit stuffing ensures <em>data transparency</em>. Because user payloads contain arbitrary bit combinations, a payload containing <code>01111110</code> would trigger early hardware frame termination without stuffing. Inserting a '0' after five 1s guarantees that six consecutive 1s NEVER appear in the payload body.
+          </p>
+        </div>
+
+        <div style="text-align:right;">
+          <a href="assets/docs/University_Exam_Solved_Question.pdf" target="_blank" class="btn btn-secondary">
+            <span>Download Exam Solution PDF (Bhavy Gol - 25CS016)</span>
+            <span>&darr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Downloadable Project Deliverables & Academic Resources -->
+  <section class="section" id="deliverables" style="background: rgba(15, 23, 42, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Academic Resources</span>
+        <h2 class="section-title">Project Deliverables &amp; Download Links</h2>
+        <p class="section-desc">
+          Formal documentation, presentation slides, solved PDFs, and instructions to reproduce for <strong>Bhavy Gol (Student ID: 25CS016)</strong>.
+        </p>
+      </div>
+
+      <div class="gallery-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:2rem; margin-bottom:0.5rem; color:var(--accent-cyan);">&#128196;</div>
+            <h4 style="font-size:1.1rem; margin-bottom:0.5rem;">Technical Report PDF</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+              Complete academic documentation covering HDLC architecture, pseudocode, complexity analysis, and results. Includes candidate details: Bhavy Gol (25CS016).
+            </p>
+          </div>
+          <a href="assets/docs/NetVista3D_HDLC_Technical_Report.pdf" target="_blank" class="btn btn-secondary" style="width:100%; justify-content:center;">
+            Download Report PDF
+          </a>
+        </div>
+
+        <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:2rem; margin-bottom:0.5rem; color:var(--accent-amber);">&#127914;</div>
+            <h4 style="font-size:1.1rem; margin-bottom:0.5rem;">PowerPoint Presentation</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+              15-slide PowerPoint deck with high-resolution visual diagrams and candidate details (Bhavy Gol, ID: 25CS016).
+            </p>
+          </div>
+          <a href="assets/docs/NetVista3D_HDLC_Presentation.pptx" download class="btn btn-secondary" style="width:100%; justify-content:center;">
+            Download Presentation (.pptx)
+          </a>
+        </div>
+
+        <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:2rem; margin-bottom:0.5rem; color:var(--accent-rose);">&#128218;</div>
+            <h4 style="font-size:1.1rem; margin-bottom:0.5rem;">Solved Exam Solution PDF</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+              Formal 7-mark university numerical question and full answer with mathematical steps and trace table.
+            </p>
+          </div>
+          <a href="assets/docs/University_Exam_Solved_Question.pdf" target="_blank" class="btn btn-secondary" style="width:100%; justify-content:center;">
+            Download Exam Solution PDF
+          </a>
+        </div>
+
+        <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:2rem; margin-bottom:0.5rem; color:var(--accent-emerald);">&#128187;</div>
+            <h4 style="font-size:1.1rem; margin-bottom:0.5rem;">Source Code &amp; GUI App</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+              Python scripts (<code>hdlc_core.py</code>, <code>hdlc_gui.py</code>, <code>experiment_runner.py</code>) ready to execute.
+            </p>
+          </div>
+          <a href="#algorithms" class="btn btn-primary" style="width:100%; justify-content:center;">
+            View Source Code
+          </a>
+        </div>
+      </div>
+
+      <!-- Instructions to Reproduce -->
+      <div style="margin-top:3rem; background:var(--bg-card); border:1px solid var(--border-glass); border-radius:var(--radius-lg); padding:2rem;">
+        <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:1rem; color:var(--accent-cyan);">Instructions to Reproduce Locally:</h3>
+        <div style="font-family:'JetBrains Mono'; font-size:0.88rem; background:#050811; padding:1.25rem; border-radius:var(--radius-md); color:#e2e8f0; line-height:1.8;">
+          <span style="color:#64748b;"># 1. Run Python Desktop GUI Application:</span><br>
+          cd NETVISTA_3D_HDLC_BIT_STUFFING_25CS016_FINAL/03_WORKING_GUI_APPLICATION<br>
+          python3 src/hdlc_gui.py<br><br>
+          <span style="color:#64748b;"># 2. Run CLI Presets and Automated Pytest:</span><br>
+          cd ../02_PYTHON_SOURCE_CODE<br>
+          python3 src/hdlc_cli.py --presets<br>
+          pytest tests/test_hdlc.py -v<br><br>
+          <span style="color:#64748b;"># 3. Serve this Interactive 3D Website locally:</span><br>
+          cd website<br>
+          python3 -m http.server 8080
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox Modal for Screenshots -->
+  <div class="modal-overlay" id="image-modal" onclick="closeImageModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modal-title" style="font-size:1.1rem; color:var(--accent-cyan);">Image Preview</h3>
+        <button class="modal-close" onclick="closeImageModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="modal-img" src="" alt="Enlarged Screenshot">
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3 style="font-size:1.2rem; color:#fff; margin-bottom:0.75rem;">NetVista 3D &mdash; HDLC Assessment</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">
+            Developed for ITUC201: Fundamentals of Computer Networks at Charotar University of Science and Technology (CHARUSAT).
+            Designed for 100% mathematical accuracy and high-fidelity video presentation defense.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#hero">Overview</a></li>
+            <li><a href="#visualizer-3d">3D Visualizer</a></li>
+            <li><a href="#simulator">Live Simulator</a></li>
+            <li><a href="#technical-knowledge">Knowledge Base</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Academic Links</h4>
+          <ul class="footer-links">
+            <li><a href="#algorithms">Core Code</a></li>
+            <li><a href="#benchmarks">Benchmark Experiments</a></li>
+            <li><a href="#exam-solution">Solved Exam Question</a></li>
+            <li><a href="#deliverables">Project Deliverables</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Candidate Info</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">
+            <strong>Candidate:</strong> Bhavy Gol<br>
+            <strong>Student ID:</strong> 25CS016<br>
+            <strong>Branch:</strong> Computer Engineering<br>
+            <strong>Academic Year:</strong> 2026–27
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 NetVista 3D | HDLC Bit Stuffing & Framing Protocol System | Candidate: Bhavy Gol (ID: 25CS016) | CHARUSAT</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Script -->
+  <script src="app.js"></script>
+</body>
+</html>
