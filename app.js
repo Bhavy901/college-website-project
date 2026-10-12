@@ -743,6 +743,65 @@ function closeImageModal() {
   if (modal) modal.style.display = "none";
 }
 
+const DOC_URLS = {
+  "tech_doc": {
+    title: "Technical Assessment Report & Documentation (Bhavy Gol - 25CS016)",
+    url: "docs/25CS016_technical_document.pdf#toolbar=1&navpanes=0&view=FitH"
+  },
+  "slides": {
+    title: "Presentation Slides Defense Deck (Bhavy Gol - 25CS016)",
+    url: "docs/25CS016_Presentation_slides.pdf#toolbar=1&navpanes=0&view=FitH"
+  },
+  "results": {
+    title: "Solved Exam Question & Additional Results (Bhavy Gol - 25CS016)",
+    url: "docs/25CS016_Additional_results.pdf#toolbar=1&navpanes=0&view=FitH"
+  }
+};
+
+function openPdfModal(docKeyOrUrl, title) {
+  const modal = document.getElementById("pdf-modal");
+  const iframe = document.getElementById("pdf-iframe");
+  const titleEl = document.getElementById("pdf-modal-title");
+  const openTabEl = document.getElementById("pdf-open-newtab");
+
+  if (!modal || !iframe) return;
+
+  let targetUrl = docKeyOrUrl;
+  let docTitle = title || "Document Viewer";
+
+  if (DOC_URLS[docKeyOrUrl]) {
+    targetUrl = DOC_URLS[docKeyOrUrl].url;
+    docTitle = DOC_URLS[docKeyOrUrl].title;
+  }
+
+  // Set clean title and raw link
+  if (titleEl) titleEl.innerText = docTitle;
+  if (openTabEl) openTabEl.href = targetUrl.split('#')[0];
+
+  // Load exact vector PDF inside modal frame
+  iframe.src = targetUrl;
+
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closePdfModal() {
+  const modal = document.getElementById("pdf-modal");
+  const iframe = document.getElementById("pdf-iframe");
+  if (modal) {
+    modal.style.display = "none";
+    if (iframe) iframe.src = "";
+    document.body.style.overflow = "";
+  }
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeImageModal();
+    closePdfModal();
+  }
+});
+
 // Initialize benchmark chart using Chart.js
 function initBenchmarkChart() {
   const ctx = document.getElementById("overheadChart");

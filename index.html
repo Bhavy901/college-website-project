@@ -77,9 +77,9 @@
           <a href="#technical-knowledge" class="btn btn-secondary">
             <span>Explore Knowledge Base</span>
           </a>
-          <a href="assets/docs/NetVista3D_HDLC_Technical_Report.pdf" target="_blank" class="btn btn-secondary">
-            <span>Technical Report PDF</span>
-          </a>
+          <button type="button" onclick="openPdfModal('tech_doc', 'Technical Report PDF (Bhavy Gol - 25CS016)')" class="btn btn-secondary">
+            <span>&#128065; Technical Report</span>
+          </button>
         </div>
       </div>
 
@@ -850,10 +850,10 @@
         </div>
 
         <div style="text-align:right;">
-          <a href="assets/docs/University_Exam_Solved_Question.pdf" target="_blank" class="btn btn-secondary">
-            <span>Download Exam Solution PDF (Bhavy Gol - 25CS016)</span>
-            <span>&darr;</span>
-          </a>
+          <button type="button" onclick="openPdfModal('results', 'Solved Exam &amp; Results PDF (Bhavy Gol - 25CS016)')" class="btn btn-secondary">
+            <span>&#128065; View Solved Exam PDF (Bhavy Gol - 25CS016)</span>
+            <span>&rarr;</span>
+          </button>
         </div>
       </div>
     </div>
@@ -864,9 +864,9 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Academic Resources</span>
-        <h2 class="section-title">Project Deliverables &amp; Download Links</h2>
+        <h2 class="section-title">Project Deliverables &amp; Direct Document Viewers</h2>
         <p class="section-desc">
-          Formal documentation, presentation slides, solved PDFs, and instructions to reproduce for <strong>Bhavy Gol (Student ID: 25CS016)</strong>.
+          Interactive full-screen document viewing for <strong>Bhavy Gol (Student ID: 25CS016)</strong>. Direct one-click reader for technical reports, presentation slide deck, and solved examination results.
         </p>
       </div>
 
@@ -879,9 +879,9 @@
               Complete academic documentation covering HDLC architecture, pseudocode, complexity analysis, and results. Includes candidate details: Bhavy Gol (25CS016).
             </p>
           </div>
-          <a href="docs/25CS016_technical_document.pdf" target="_blank" class="btn btn-secondary" style="width:100%; justify-content:center;">
-            Download Report PDF
-          </a>
+          <button type="button" class="btn btn-view-pdf" style="width:100%; justify-content:center;" onclick="openPdfModal('tech_doc', 'Technical Report PDF (Bhavy Gol - 25CS016)')">
+            <span>&#128065; View Technical Report</span>
+          </button>
         </div>
 
         <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
@@ -892,9 +892,9 @@
               15 high-resolution presentation slides with visual diagrams, algorithmic flows, and candidate details (Bhavy Gol, ID: 25CS016).
             </p>
           </div>
-          <a href="docs/25CS016_Presentation_slides.pdf" target="_blank" class="btn btn-secondary" style="width:100%; justify-content:center;">
-            Download Presentation Slides (PDF)
-          </a>
+          <button type="button" class="btn btn-view-pdf" style="width:100%; justify-content:center;" onclick="openPdfModal('slides', 'Presentation Slides PDF (Bhavy Gol - 25CS016)')">
+            <span>&#128065; View Presentation Slides</span>
+          </button>
         </div>
 
         <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
@@ -905,9 +905,9 @@
               Formal 7-mark university numerical problem, step trace table, and empirical test result graphs (Bhavy Gol, ID: 25CS016).
             </p>
           </div>
-          <a href="docs/25CS016_Additional_results.pdf" target="_blank" class="btn btn-secondary" style="width:100%; justify-content:center;">
-            Download Exam Solution PDF
-          </a>
+          <button type="button" class="btn btn-view-pdf" style="width:100%; justify-content:center;" onclick="openPdfModal('results', 'Solved Exam &amp; Additional Results PDF (Bhavy Gol - 25CS016)')">
+            <span>&#128065; View Exam &amp; Results</span>
+          </button>
         </div>
 
         <div class="gallery-card" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
@@ -919,7 +919,7 @@
             </p>
           </div>
           <a href="#algorithms" class="btn btn-primary" style="width:100%; justify-content:center;">
-            View Source Code
+            <span>&#128187; View Source Code</span>
           </a>
         </div>
       </div>
@@ -952,6 +952,30 @@
       </div>
       <div class="modal-body">
         <img id="modal-img" src="" alt="Enlarged Screenshot">
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Interactive Document Viewer Modal -->
+  <div class="modal-overlay" id="pdf-modal" onclick="closePdfModal()">
+    <div class="modal-content pdf-modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:1.5rem;">&#128196;</span>
+          <div>
+            <h3 id="pdf-modal-title" style="font-size:1.1rem; font-weight:700; color:var(--accent-cyan); margin:0;">Document Viewer</h3>
+            <span id="pdf-modal-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Direct in-browser reading &bull; Candidate: Bhavy Gol (25CS016)</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <a id="pdf-open-newtab" href="#" target="_blank" class="btn btn-secondary" style="padding:6px 14px; font-size:0.82rem;">
+            <span>Open in New Tab &#8599;</span>
+          </a>
+          <button class="modal-close" onclick="closePdfModal()" title="Close viewer">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="flex:1; padding:0; margin:0; background:#050811; position:relative; overflow:hidden;">
+        <iframe id="pdf-iframe" src="" style="width:100%; height:100%; min-height:80vh; border:none; display:block;" title="HDLC Document Viewer"></iframe>
       </div>
     </div>
   </div>
